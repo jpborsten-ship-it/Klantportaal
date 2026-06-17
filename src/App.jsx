@@ -4,6 +4,7 @@ import Topbar from './components/layout/Topbar'
 import Dashboard from './pages/Dashboard'
 import Orders from './pages/Orders'
 import OrderDetail from './pages/OrderDetail'
+import DeliveryChoice from './pages/DeliveryChoice'
 import Finance from './pages/Finance'
 import Leveragenda from './pages/Leveragenda'
 import MijnGegevens from './pages/MijnGegevens'
@@ -22,6 +23,7 @@ function App() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/:orderId" element={<OrderDetail />} />
+            <Route path="/orders/:orderId/leverkeuze" element={<DeliveryChoice />} />
             <Route path="/finance" element={<Finance />} />
             <Route path="/leveragenda" element={<Leveragenda />} />
             <Route path="/mijn-gegevens" element={<MijnGegevens />} />

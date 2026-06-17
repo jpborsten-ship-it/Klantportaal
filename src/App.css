@@ -161,3 +161,29 @@
   flex-wrap: wrap;
   gap: 0.5rem;
 }
+
+.delivery-choice-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.delivery-summary {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8ef;
+}
+
+.delivery-summary ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.delivery-hint {
+  color: #1763a6;
+}

@@ -2,8 +2,10 @@ import { useParams, Link } from 'react-router-dom'
 import Card from '../components/ui/Card'
 import Table from '../components/ui/Table'
 import StatusBadge from '../components/ui/StatusBadge'
-import { orders, orderLines } from '../data/mockData'
+import Button from '../components/ui/Button'
+import { orders } from '../data/mockData'
 import { getOrderLines } from '../utils/orderStatus'
+import { useDeliveryPlanning } from '../state/DeliveryPlanningContext'
 
 const columns = [
   { key: 'productNumber', header: 'Artikelnummer' },
@@ -18,8 +20,9 @@ const columns = [
 
 export default function OrderDetail() {
   const { orderId } = useParams()
+  const { lines } = useDeliveryPlanning()
   const order = orders.find((o) => o.id === orderId)
-  const lines = getOrderLines(orderLines, orderId)
+  const orderLines = getOrderLines(lines, orderId)
 
   if (!order) {
     return (
@@ -32,12 +35,15 @@ export default function OrderDetail() {
   }
 
   return (
-    <Card title={`Order ${order.orderNumber}`}>
+    <Card
+      title={`Order ${order.orderNumber}`}
+      action={<Link to={`/orders/${order.id}/leverkeuze`}><Button>Levermoment kiezen</Button></Link>}
+    >
       <p>
         Besteld op {order.orderDate}
         {order.customerReference && <> · referentie {order.customerReference}</>} · totaal € {order.totalAmount.toFixed(2)}
       </p>
-      <Table columns={columns} rows={lines} getRowKey={(row) => row.id} emptyMessage="Deze order heeft geen productregels." />
+      <Table columns={columns} rows={orderLines} getRowKey={(row) => row.id} emptyMessage="Deze order heeft geen productregels." />
     </Card>
   )
 }

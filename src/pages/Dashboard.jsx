@@ -1,15 +1,20 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Card from '../components/ui/Card'
 import Button from '../components/ui/Button'
-import { invoices, orderLines, deliveryMoments } from '../data/mockData'
+import { invoices, deliveryMoments } from '../data/mockData'
+import { useDeliveryPlanning } from '../state/DeliveryPlanningContext'
 
 const ONDERWEG_STATUSSEN = ['onderweg_naar_partsprofi', 'verzonden']
 
 export default function Dashboard() {
+  const navigate = useNavigate()
+  const { lines } = useDeliveryPlanning()
+
   const openstaandeFacturen = invoices.filter((inv) => inv.status === 'open')
-  const ordersOnderweg = orderLines.filter((line) => ONDERWEG_STATUSSEN.includes(line.status))
+  const ordersOnderweg = lines.filter((line) => ONDERWEG_STATUSSEN.includes(line.status))
   const geplandeLevermomenten = deliveryMoments.filter((dm) => dm.status === 'gepland')
-  const benodigdeLeverkeuze = orderLines.filter((line) => line.status === 'binnen_bij_partsprofi' && !line.plannedDeliveryDate)
+  const benodigdeLeverkeuze = lines.filter((line) => line.status === 'binnen_bij_partsprofi' && !line.plannedDeliveryDate)
+  const eersteOrderMetLeverkeuze = benodigdeLeverkeuze[0]?.orderId
 
   return (
     <div className="dashboard-grid">
@@ -34,14 +39,19 @@ export default function Dashboard() {
       <Card title="Leverkeuze nodig">
         <p className="dashboard-metric">{benodigdeLeverkeuze.length}</p>
         <p>producten zijn binnen maar nog niet ingepland</p>
-        <Link to="/leveragenda">Plan leverdag</Link>
+        {eersteOrderMetLeverkeuze && <Link to={`/orders/${eersteOrderMetLeverkeuze}/leverkeuze`}>Plan leverdag</Link>}
       </Card>
 
       <Card title="Snelle acties" className="dashboard-actions">
-        <Button onClick={() => {}}>Factuur betalen</Button>
-        <Button onClick={() => {}}>Levermoment kiezen</Button>
-        <Button variant="secondary" onClick={() => {}}>Order bekijken</Button>
-        <Button variant="secondary" onClick={() => {}}>Retour aanvragen</Button>
+        <Button onClick={() => navigate('/finance')}>Factuur betalen</Button>
+        <Button
+          onClick={() => eersteOrderMetLeverkeuze && navigate(`/orders/${eersteOrderMetLeverkeuze}/leverkeuze`)}
+          disabled={!eersteOrderMetLeverkeuze}
+        >
+          Levermoment kiezen
+        </Button>
+        <Button variant="secondary" onClick={() => navigate('/orders')}>Order bekijken</Button>
+        <Button variant="secondary" onClick={() => navigate('/retouren')}>Retour aanvragen</Button>
       </Card>
     </div>
   )
