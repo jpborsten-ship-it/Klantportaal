@@ -11,6 +11,7 @@ const STATUS_CONFIG = {
   geleverd: { label: 'Geleverd', tone: 'success' },
   vertraagd: { label: 'Vertraagd', tone: 'warning' },
   retour_aangevraagd: { label: 'Retour aangevraagd', tone: 'warning' },
+  deels_verzonden: { label: 'Deels verzonden', tone: 'info' },
   // InvoiceStatus
   open: { label: 'Open', tone: 'warning' },
   betaald: { label: 'Betaald', tone: 'success' },
