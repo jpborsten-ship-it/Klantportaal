@@ -241,3 +241,67 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+
+.finance-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.mijn-gegevens,
+.retouren,
+.faq {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.data-list {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  row-gap: 0.4rem;
+  margin: 0;
+}
+
+.data-list dt {
+  color: #5a6b7a;
+}
+
+.data-list dd {
+  margin: 0;
+}
+
+.address-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0;
+}
+
+.form-hint {
+  color: #5a6b7a;
+  font-size: 0.85rem;
+}
+
+.change-request-form,
+.return-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 420px;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.faq-question {
+  font-weight: 600;
+  margin: 0;
+}
+
+.faq-answer {
+  margin: 0.2rem 0 0;
+  color: #44525e;
+}

@@ -1,17 +1,15 @@
 import Card from '../components/ui/Card'
 import AgendaDay from '../components/agenda/AgendaDay'
 import AgendaProductCard from '../components/agenda/AgendaProductCard'
-import { customers, orders } from '../data/mockData'
+import { orders } from '../data/mockData'
 import { useDeliveryPlanning } from '../state/DeliveryPlanningContext'
 import { linesForCustomer } from '../utils/orderStatus'
 import { buildAgendaDays } from '../utils/deliveryCost'
-
-// Fase 1-6 draaien zonder auth op één vaste klant (zie Topbar), dezelfde aanname als elders in het portaal.
-const HUIDIGE_KLANT_ID = customers[0].id
+import { CURRENT_CUSTOMER_ID } from '../utils/currentCustomer'
 
 export default function Leveragenda() {
   const { lines, updateLineDeliveryDate } = useDeliveryPlanning()
-  const klantLines = linesForCustomer(lines, orders, HUIDIGE_KLANT_ID)
+  const klantLines = linesForCustomer(lines, orders, CURRENT_CUSTOMER_ID)
   const days = buildAgendaDays(klantLines)
   const nietIngepland = klantLines.filter(
     (line) => !line.plannedDeliveryDate && !['geleverd', 'retour_aangevraagd'].includes(line.status)
