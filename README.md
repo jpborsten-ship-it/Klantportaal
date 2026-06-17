@@ -1,3 +1,13 @@
+## Status
+Fase 1 t/m 7 van het MVP zijn gebouwd op mockdata, zonder authenticatie: datastructuur, dashboard, orders met statusflow per productregel, levermoment kiezen, interactieve leveragenda, finance/mijn gegevens/retouren/FAQ. Zie `docs/INTEGRATIONS.md` voor alle punten die nog gekoppeld moeten worden aan echte systemen (boekhouding, orderdatabase, DHL-tracking, betaalprovider) en `src/auth/AUTH_NOTES.md` voor waar authenticatie later wordt ingevoegd.
+
+```
+npm install
+npm run dev
+```
+
+---
+
 “Maak nog geen definitieve API-koppelingen. Gebruik mockdata en zorg dat de code later makkelijk te koppelen is aan echte systemen.”
 
 
