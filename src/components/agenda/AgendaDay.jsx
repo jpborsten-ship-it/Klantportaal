@@ -1,20 +1,32 @@
+import { useState } from 'react'
 import AgendaProductCard from './AgendaProductCard'
-import { calculateDeliveryCost, getCombineMessage } from '../../utils/deliveryCost'
+import { formatDayLabel } from '../../utils/deliveryCost'
 
 export default function AgendaDay({ day, orders, onMove }) {
+  const [isDragOver, setIsDragOver] = useState(false)
   const lineCount = day.plannedLines.length
-  const cost = calculateDeliveryCost(lineCount)
-  const message = getCombineMessage(lineCount)
 
   return (
-    <div className="agenda-day">
+    <div
+      className={`agenda-day${isDragOver ? ' agenda-day--dragover' : ''}`}
+      onDragOver={(e) => {
+        e.preventDefault()
+        setIsDragOver(true)
+      }}
+      onDragLeave={() => setIsDragOver(false)}
+      onDrop={(e) => {
+        e.preventDefault()
+        setIsDragOver(false)
+        const lineId = e.dataTransfer.getData('text/plain')
+        if (lineId) onMove(lineId, day.date)
+      }}
+    >
       <div className="agenda-day-header">
-        <strong>{day.date}</strong>
-        {lineCount > 0 && <span>{cost === 0 ? 'gratis bezorgen' : `€ ${cost.toFixed(2)} bezorgkosten`}</span>}
+        <strong>{formatDayLabel(day.date)}</strong>
       </div>
 
       {lineCount === 0 ? (
-        <p className="agenda-day-empty">Nog niets gepland.</p>
+        <p className="agenda-day-empty">Sleep hier een product naartoe.</p>
       ) : (
         day.plannedLines.map((line) => (
           <AgendaProductCard
@@ -25,8 +37,6 @@ export default function AgendaDay({ day, orders, onMove }) {
           />
         ))
       )}
-
-      {message && <p className="delivery-hint">{message}</p>}
     </div>
   )
 }

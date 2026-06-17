@@ -162,84 +162,84 @@
   gap: 0.5rem;
 }
 
-.delivery-choice-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.delivery-summary {
-  margin-top: 1.25rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e2e8ef;
-}
-
-.delivery-summary ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.delivery-hint {
-  color: #1763a6;
-}
-
 .leveragenda {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
+.preference-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
 .agenda-days {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 0.5rem;
 }
 
 .agenda-day {
   border: 1px solid #e2e8ef;
-  border-radius: 8px;
-  padding: 0.75rem;
+  border-radius: 6px;
+  padding: 0.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.35rem;
 }
 
 .agenda-day-header {
   display: flex;
   justify-content: space-between;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 .agenda-day-empty {
   color: #5a6b7a;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   margin: 0;
 }
 
 .agenda-product-card {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.2rem;
   background: #f7f9fb;
-  border-radius: 6px;
-  padding: 0.5rem;
+  border-radius: 5px;
+  padding: 0.35rem 0.45rem;
+  font-size: 0.8rem;
+  cursor: grab;
+}
+
+.agenda-product-card select {
+  font-size: 0.75rem;
+}
+
+.agenda-product-card:active {
+  cursor: grabbing;
+}
+
+.agenda-day--dragover {
+  background: #e3f0fb;
+  border-color: #1763a6;
 }
 
 .agenda-product-meta {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: #5a6b7a;
 }
 
-.agenda-unplanned .card-body {
+.agenda-page-hint {
+  font-size: 0.85rem;
+  color: #5a6b7a;
+  font-weight: 400;
+}
+
+.agenda-pagination {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
 }
 
 .finance-actions {
