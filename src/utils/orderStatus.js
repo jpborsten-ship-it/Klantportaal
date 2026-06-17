@@ -15,3 +15,8 @@ export function deriveOrderStatus(lines) {
 export function getOrderLines(orderLines, orderId) {
   return orderLines.filter((line) => line.orderId === orderId)
 }
+
+export function linesForCustomer(orderLines, orders, customerId) {
+  const orderIds = new Set(orders.filter((order) => order.customerId === customerId).map((order) => order.id))
+  return orderLines.filter((line) => orderIds.has(line.orderId))
+}

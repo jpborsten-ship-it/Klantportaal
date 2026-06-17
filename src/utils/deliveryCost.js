@@ -33,3 +33,31 @@ export function getAvailableDeliveryDays(lines, daysAhead = PLANNING_HORIZON_DAY
   }
   return days
 }
+
+// Voor de leveragenda: elke dag in de horizon met de regels die er al op gepland staan.
+export function buildAgendaDays(lines, daysAhead = PLANNING_HORIZON_DAYS) {
+  const today = new Date()
+  const days = []
+  for (let i = 0; i < daysAhead; i++) {
+    const date = new Date(today)
+    date.setDate(today.getDate() + i)
+    const iso = date.toISOString().slice(0, 10)
+    const plannedLines = lines.filter((line) => line.plannedDeliveryDate === iso)
+    days.push({ date: iso, plannedLines })
+  }
+  return days
+}
+
+// Dagen waarop een specifieke regel geleverd kan worden: nooit vóór de
+// verwachte aankomst bij PartsProfi.
+export function getSelectableDaysForLine(line, daysAhead = PLANNING_HORIZON_DAYS) {
+  const today = new Date()
+  const days = []
+  for (let i = 0; i < daysAhead; i++) {
+    const date = new Date(today)
+    date.setDate(today.getDate() + i)
+    const iso = date.toISOString().slice(0, 10)
+    if (line.expectedArrivalAtPartsProfi && line.expectedArrivalAtPartsProfi <= iso) days.push(iso)
+  }
+  return days
+}

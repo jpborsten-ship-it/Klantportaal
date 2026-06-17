@@ -187,3 +187,57 @@
 .delivery-hint {
   color: #1763a6;
 }
+
+.leveragenda {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.agenda-days {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+.agenda-day {
+  border: 1px solid #e2e8ef;
+  border-radius: 8px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.agenda-day-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+}
+
+.agenda-day-empty {
+  color: #5a6b7a;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.agenda-product-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f7f9fb;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+.agenda-product-meta {
+  font-size: 0.8rem;
+  color: #5a6b7a;
+}
+
+.agenda-unplanned .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
