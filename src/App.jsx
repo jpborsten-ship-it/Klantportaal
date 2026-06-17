@@ -3,6 +3,10 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
+import { customers, orders, orderLines, invoices, deliveryMoments, deliveryMomentLines, returnRequests, faqItems } from './data/mockData'
+
+// Tijdelijke fase-1 sanity check, wordt verwijderd in fase 2 zodra routing/pagina's er staan.
+console.log('mockdata check', { customers, orders, orderLines, invoices, deliveryMoments, deliveryMomentLines, returnRequests, faqItems })
 
 function App() {
   const [count, setCount] = useState(0)
