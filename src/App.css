@@ -9,6 +9,11 @@
   color: #fff;
   padding: 1.5rem 1rem;
   flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .sidebar-logo {
@@ -250,6 +255,29 @@
   padding-bottom: 0.5rem;
 }
 
+.agenda-day-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 0.2rem;
+  scrollbar-width: thin;
+}
+
+.agenda-day-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.agenda-day-body::-webkit-scrollbar-thumb {
+  background: var(--ppi-border);
+  border-radius: 3px;
+}
+
+.agenda-day-body::-webkit-scrollbar-thumb:hover {
+  background: var(--ppi-text-muted);
+}
+
 .agenda-day-empty {
   color: var(--ppi-text-muted);
   font-size: 0.85rem;
@@ -280,6 +308,7 @@
   border: 1px solid var(--ppi-border);
   border-radius: 6px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .agenda-order-block-header {
@@ -335,6 +364,16 @@
   font-size: 0.9rem;
 }
 
+.agenda-block-select {
+  width: 100%;
+  font-size: 0.7rem;
+  padding: 0.2rem 0.3rem;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid var(--ppi-border);
+  background: var(--ppi-bg);
+}
+
 .agenda-product-card {
   display: flex;
   align-items: center;
@@ -381,6 +420,7 @@
 .agenda-pagination {
   display: flex;
   justify-content: center;
+  gap: 0.5rem;
   margin-top: 1.25rem;
 }
 

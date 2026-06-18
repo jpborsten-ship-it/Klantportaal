@@ -38,13 +38,7 @@ export const invoices = [
   { id: 'inv-3', invoiceNumber: 'F2026-1002', customerId: 'cust-2', date: '2026-06-05', dueDate: '2026-06-19', amount: 156.75, status: 'open', type: 'losse_factuur', downloadUrl: '#mock-download', paymentUrl: '#mock-pay' },
 ];
 
-export const orders = [
-  { id: 'ord-1', orderNumber: 'O-3001', customerId: 'cust-1', orderDate: '2026-06-16', customerReference: 'WO-554', totalAmount: 482.5, status: 'ingepland' },
-  { id: 'ord-2', orderNumber: 'O-3002', customerId: 'cust-1', orderDate: '2026-06-17', customerReference: 'WO-560', totalAmount: 210.0, status: 'vertraagd' },
-  { id: 'ord-3', orderNumber: 'O-3003', customerId: 'cust-2', orderDate: '2026-06-12', customerReference: '', totalAmount: 156.75, status: 'binnen_bij_partsprofi' },
-];
-
-export const orderLines = [
+const curatedOrderLines = [
   // Order 1 (cust-1) — mix van groen en oranje, laat zien hoe 1 order in 1 of 2 jasjes valt
   { id: 'ol-1', orderId: 'ord-1', productNumber: 'REM-2245', description: 'Remschijfset voorzijde', quantity: 1, unitPrice: 142.5, status: 'ingepland', leadTimeCategory: 'groen', expectedArrivalAtPartsProfi: '2026-06-18', plannedDeliveryDate: null, trackingCode: null, carrier: null, canReturnUntil: '2026-06-23' },
   { id: 'ol-2', orderId: 'ord-1', productNumber: 'FLT-0099', description: 'Oliefilter set (x10)', quantity: 1, unitPrice: 90.0, status: 'verzonden', leadTimeCategory: 'oranje', expectedArrivalAtPartsProfi: '2026-06-10', plannedDeliveryDate: null, trackingCode: '3SDHL00012345', carrier: 'DHL', canReturnUntil: '2026-06-23' },
@@ -58,6 +52,50 @@ export const orderLines = [
   { id: 'ol-6', orderId: 'ord-3', productNumber: 'KOP-7712', description: 'Koppelingsset', quantity: 1, unitPrice: 110.75, status: 'onderweg_naar_partsprofi', leadTimeCategory: 'oranje', expectedArrivalAtPartsProfi: '2026-06-20', plannedDeliveryDate: null, trackingCode: null, carrier: null, canReturnUntil: '2026-07-03' },
   { id: 'ol-7', orderId: 'ord-3', productNumber: 'LMP-0456', description: 'LED koplampset', quantity: 1, unitPrice: 46.0, status: 'retour_aangevraagd', leadTimeCategory: 'groen', expectedArrivalAtPartsProfi: '2026-06-08', plannedDeliveryDate: '2026-06-11', trackingCode: '3SDHL00099887', carrier: 'DHL', canReturnUntil: '2026-07-03' },
 ];
+
+// Generator voor twee extra orders met veel regels, puur om de leveragenda-opmaak
+// te kunnen beoordelen bij een realistische hoeveelheid (~40 regels/5 orders totaal).
+const TEST_PRODUCT_TYPES = ['Remblok', 'Bougie', 'Ruitenwisser', 'Filter', 'Lamp', 'Sensor', 'Pakking', 'Riem'];
+
+function generateTestOrderLines(orderId, count, startIndex) {
+  return Array.from({ length: count }, (_, i) => {
+    const n = startIndex + i;
+    return {
+      id: `ol-gen-${orderId}-${i + 1}`,
+      orderId,
+      productNumber: `GEN-${1000 + n}`,
+      description: `${TEST_PRODUCT_TYPES[n % TEST_PRODUCT_TYPES.length]} testonderdeel ${n}`,
+      quantity: (n % 4) + 1,
+      unitPrice: 20 + (n % 10) * 7.5,
+      status: 'binnen_bij_partsprofi',
+      leadTimeCategory: n % 2 === 0 ? 'groen' : 'oranje',
+      expectedArrivalAtPartsProfi: null,
+      plannedDeliveryDate: null,
+      trackingCode: null,
+      carrier: null,
+      canReturnUntil: '2026-07-15',
+    };
+  });
+}
+
+const order4Lines = generateTestOrderLines('ord-4', 17, 1);
+const order5Lines = generateTestOrderLines('ord-5', 16, 18);
+
+function sumLineTotal(lines) {
+  return lines.reduce((sum, line) => sum + line.quantity * line.unitPrice, 0);
+}
+
+export const orders = [
+  { id: 'ord-1', orderNumber: 'O-3001', customerId: 'cust-1', orderDate: '2026-06-16', customerReference: 'WO-554', totalAmount: 482.5, status: 'ingepland' },
+  { id: 'ord-2', orderNumber: 'O-3002', customerId: 'cust-1', orderDate: '2026-06-17', customerReference: 'WO-560', totalAmount: 210.0, status: 'vertraagd' },
+  { id: 'ord-3', orderNumber: 'O-3003', customerId: 'cust-2', orderDate: '2026-06-12', customerReference: '', totalAmount: 156.75, status: 'binnen_bij_partsprofi' },
+  // Besteldata bewust verder uit elkaar zodat de groen/oranje-clusters van deze
+  // twee testorders niet allemaal op dezelfde dagen vallen als ord-1/2/3.
+  { id: 'ord-4', orderNumber: 'O-3004', customerId: 'cust-1', orderDate: '2026-06-19', customerReference: 'WO-571', totalAmount: sumLineTotal(order4Lines), status: 'binnen_bij_partsprofi' },
+  { id: 'ord-5', orderNumber: 'O-3005', customerId: 'cust-1', orderDate: '2026-06-23', customerReference: 'WO-572', totalAmount: sumLineTotal(order5Lines), status: 'binnen_bij_partsprofi' },
+];
+
+export const orderLines = [...curatedOrderLines, ...order4Lines, ...order5Lines];
 
 export const deliveryMoments = [
   // Gecombineerd levermoment: bundelt regels uit potentieel meerdere orders van dezelfde klant

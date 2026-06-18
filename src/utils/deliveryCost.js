@@ -77,20 +77,26 @@ export function buildAgendaDays(lines, isoDates) {
   }))
 }
 
-// Werkdagen waarop een specifieke regel geleverd kan worden: nooit vóór haar
-// eigen vroegst-mogelijke datum.
-export function getSelectableDaysForLine(line, order, daysAhead = PLANNING_HORIZON_DAYS) {
-  const earliest = getEarliestDeliveryDate(order.orderDate, line.leadTimeCategory)
+// Werkdagen vanaf een vroegst-mogelijke datum — gedeelde basis voor zowel een
+// losse regel als een heel jasje.
+export function getSelectableDaysFrom(earliestDate, daysAhead = PLANNING_HORIZON_DAYS) {
   const days = []
   const cursor = new Date()
   let collected = 0
   while (collected < daysAhead) {
     if (isWeekday(cursor)) {
       const iso = toIsoDate(cursor)
-      if (iso >= earliest) days.push(iso)
+      if (iso >= earliestDate) days.push(iso)
       collected++
     }
     cursor.setDate(cursor.getDate() + 1)
   }
   return days
+}
+
+// Werkdagen waarop een specifieke regel geleverd kan worden: nooit vóór haar
+// eigen vroegst-mogelijke datum.
+export function getSelectableDaysForLine(line, order, daysAhead = PLANNING_HORIZON_DAYS) {
+  const earliest = getEarliestDeliveryDate(order.orderDate, line.leadTimeCategory)
+  return getSelectableDaysFrom(earliest, daysAhead)
 }

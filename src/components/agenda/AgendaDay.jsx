@@ -41,20 +41,23 @@ export default function AgendaDay({ day, orders, onMoveLine, onMoveBlock, onDrag
         {locked && <span className="agenda-day-lock" title="Al in voorbereiding, niet meer te wijzigen">🔒</span>}
       </div>
 
-      {blocks.length === 0 ? (
-        <p className="agenda-day-empty">Sleep hier naartoe.</p>
-      ) : (
-        blocks.map((block) => (
-          <AgendaOrderBlock
-            key={block.order?.id}
-            block={block}
-            locked={locked}
-            onMoveLine={onMoveLine}
-            onMoveBlock={onMoveBlock}
-            onDragStateChange={onDragStateChange}
-          />
-        ))
-      )}
+      <div className="agenda-day-body">
+        {blocks.length === 0 ? (
+          <p className="agenda-day-empty">Sleep hier naartoe.</p>
+        ) : (
+          blocks.map((block) => (
+            <AgendaOrderBlock
+              key={block.order?.id}
+              block={block}
+              currentDate={day.date}
+              locked={locked}
+              onMoveLine={onMoveLine}
+              onMoveBlock={onMoveBlock}
+              onDragStateChange={onDragStateChange}
+            />
+          ))
+        )}
+      </div>
     </div>
   )
 }

@@ -1,12 +1,14 @@
 import AgendaProductCard from './AgendaProductCard'
-import { formatDayLabel } from '../../utils/deliveryCost'
+import { formatDayLabel, getSelectableDaysFrom } from '../../utils/deliveryCost'
 
 // Een "jasje": de regels van één order die samen op een dag staan. De kop is
-// als geheel sleepbaar (verplaatst alle regels die dat nog toelaten), elke
-// regel daarbinnen blijft ook zelf sleepbaar/verplaatsbaar om 'm los uit het
-// jasje te halen. Op een vergrendelde dag (vandaag/morgen) kan niets meer.
-export default function AgendaOrderBlock({ block, locked, onMoveLine, onMoveBlock, onDragStateChange }) {
+// als geheel sleepbaar (verplaatst alle regels die dat nog toelaten), of via
+// de dropdown in één keer naar een datum te zetten. Elke regel daarbinnen
+// blijft ook zelf sleepbaar/verplaatsbaar om 'm los uit het jasje te halen.
+// Op een vergrendelde dag (vandaag/morgen) kan niets meer.
+export default function AgendaOrderBlock({ block, currentDate, locked, onMoveLine, onMoveBlock, onDragStateChange }) {
   const lineIds = block.lines.map((line) => line.id)
+  const selectableDays = getSelectableDaysFrom(block.earliestDeliveryDate)
 
   return (
     <div className="agenda-order-block">
@@ -29,6 +31,20 @@ export default function AgendaOrderBlock({ block, locked, onMoveLine, onMoveBloc
         </span>
         <span className="agenda-order-block-category">vanaf {formatDayLabel(block.earliestDeliveryDate)}</span>
       </div>
+      {!locked && (
+        <select
+          className="agenda-block-select"
+          value={currentDate}
+          title="Verplaats deze hele order in één keer naar een andere datum"
+          onChange={(e) => onMoveBlock(lineIds, e.target.value)}
+        >
+          {selectableDays.map((day) => (
+            <option key={day} value={day}>
+              Hele order verplaatsen → {formatDayLabel(day)}
+            </option>
+          ))}
+        </select>
+      )}
       {block.lines.map((line) => (
         <AgendaProductCard
           key={line.id}
