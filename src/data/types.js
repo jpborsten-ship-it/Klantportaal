@@ -19,6 +19,12 @@
  */
 
 /**
+ * @typedef {'groen' | 'oranje'} LeadTimeCategory
+ * - 'groen': product kan 2 werkdagen na bestellen bij de klant zijn
+ * - 'oranje': product kan 3 werkdagen na bestellen bij de klant zijn
+ */
+
+/**
  * @typedef {Object} DeliveryAddress
  * @property {string} id
  * @property {string} label
@@ -74,7 +80,8 @@
  * @property {number} quantity
  * @property {number} unitPrice
  * @property {OrderLineStatus} status
- * @property {string|null} expectedArrivalAtPartsProfi - ISO-datum
+ * @property {LeadTimeCategory} leadTimeCategory - bepaalt de vroegst-mogelijke leverdatum, zie utils/deliveryCost.js
+ * @property {string|null} expectedArrivalAtPartsProfi - ISO-datum, informatief (stuurt de planning niet meer aan)
  * @property {string|null} plannedDeliveryDate - ISO-datum; null = nog geen leverkeuze gemaakt
  * @property {string|null} trackingCode - TODO koppeling: DHL-tracking, null tot status 'verzonden'
  * @property {string|null} carrier - TODO koppeling: DHL/vervoerder, null tot verzonden

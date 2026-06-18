@@ -39,24 +39,24 @@ export const invoices = [
 ];
 
 export const orders = [
-  { id: 'ord-1', orderNumber: 'O-3001', customerId: 'cust-1', orderDate: '2026-06-02', customerReference: 'WO-554', totalAmount: 482.5, status: 'ingepland' },
-  { id: 'ord-2', orderNumber: 'O-3002', customerId: 'cust-1', orderDate: '2026-06-10', customerReference: 'WO-560', totalAmount: 210.0, status: 'vertraagd' },
+  { id: 'ord-1', orderNumber: 'O-3001', customerId: 'cust-1', orderDate: '2026-06-16', customerReference: 'WO-554', totalAmount: 482.5, status: 'ingepland' },
+  { id: 'ord-2', orderNumber: 'O-3002', customerId: 'cust-1', orderDate: '2026-06-17', customerReference: 'WO-560', totalAmount: 210.0, status: 'vertraagd' },
   { id: 'ord-3', orderNumber: 'O-3003', customerId: 'cust-2', orderDate: '2026-06-12', customerReference: '', totalAmount: 156.75, status: 'binnen_bij_partsprofi' },
 ];
 
 export const orderLines = [
-  // Order 1 (cust-1) — al ingepland op een gecombineerd levermoment
-  { id: 'ol-1', orderId: 'ord-1', productNumber: 'REM-2245', description: 'Remschijfset voorzijde', quantity: 1, unitPrice: 142.5, status: 'ingepland', expectedArrivalAtPartsProfi: '2026-06-18', plannedDeliveryDate: '2026-06-22', trackingCode: null, carrier: null, canReturnUntil: '2026-06-23' },
-  { id: 'ol-2', orderId: 'ord-1', productNumber: 'FLT-0099', description: 'Oliefilter set (x10)', quantity: 1, unitPrice: 90.0, status: 'verzonden', expectedArrivalAtPartsProfi: '2026-06-10', plannedDeliveryDate: '2026-06-15', trackingCode: '3SDHL00012345', carrier: 'DHL', canReturnUntil: '2026-06-23' },
-  { id: 'ol-3', orderId: 'ord-1', productNumber: 'ACC-1180', description: 'Accu 12V 70Ah', quantity: 2, unitPrice: 125.0, status: 'geleverd', expectedArrivalAtPartsProfi: '2026-06-05', plannedDeliveryDate: '2026-06-08', trackingCode: '3SDHL00011111', carrier: 'DHL', canReturnUntil: '2026-06-23' },
+  // Order 1 (cust-1) — mix van groen en oranje, laat zien hoe 1 order in 1 of 2 jasjes valt
+  { id: 'ol-1', orderId: 'ord-1', productNumber: 'REM-2245', description: 'Remschijfset voorzijde', quantity: 1, unitPrice: 142.5, status: 'ingepland', leadTimeCategory: 'groen', expectedArrivalAtPartsProfi: '2026-06-18', plannedDeliveryDate: null, trackingCode: null, carrier: null, canReturnUntil: '2026-06-23' },
+  { id: 'ol-2', orderId: 'ord-1', productNumber: 'FLT-0099', description: 'Oliefilter set (x10)', quantity: 1, unitPrice: 90.0, status: 'verzonden', leadTimeCategory: 'oranje', expectedArrivalAtPartsProfi: '2026-06-10', plannedDeliveryDate: null, trackingCode: '3SDHL00012345', carrier: 'DHL', canReturnUntil: '2026-06-23' },
+  { id: 'ol-3', orderId: 'ord-1', productNumber: 'ACC-1180', description: 'Accu 12V 70Ah', quantity: 2, unitPrice: 125.0, status: 'geleverd', leadTimeCategory: 'groen', expectedArrivalAtPartsProfi: '2026-06-05', plannedDeliveryDate: null, trackingCode: '3SDHL00011111', carrier: 'DHL', canReturnUntil: '2026-06-23' },
 
-  // Order 2 (cust-1) — vertraagde regel + een regel die nog geen leverkeuze heeft (niet-ingepland)
-  { id: 'ol-4', orderId: 'ord-2', productNumber: 'BAND-2055', description: 'Bandenset 205/55R16', quantity: 4, unitPrice: 45.0, status: 'vertraagd', expectedArrivalAtPartsProfi: '2026-06-25', plannedDeliveryDate: null, trackingCode: null, carrier: null, canReturnUntil: '2026-07-01' },
-  { id: 'ol-5', orderId: 'ord-2', productNumber: 'WIS-0334', description: 'Ruitenwisserset', quantity: 1, unitPrice: 30.0, status: 'binnen_bij_partsprofi', expectedArrivalAtPartsProfi: '2026-06-14', plannedDeliveryDate: null, trackingCode: null, carrier: null, canReturnUntil: '2026-07-01' },
+  // Order 2 (cust-1) — vertraagde regel (oranje) + een groene regel
+  { id: 'ol-4', orderId: 'ord-2', productNumber: 'BAND-2055', description: 'Bandenset 205/55R16', quantity: 4, unitPrice: 45.0, status: 'vertraagd', leadTimeCategory: 'oranje', expectedArrivalAtPartsProfi: '2026-06-25', plannedDeliveryDate: null, trackingCode: null, carrier: null, canReturnUntil: '2026-07-01' },
+  { id: 'ol-5', orderId: 'ord-2', productNumber: 'WIS-0334', description: 'Ruitenwisserset', quantity: 1, unitPrice: 30.0, status: 'binnen_bij_partsprofi', leadTimeCategory: 'groen', expectedArrivalAtPartsProfi: '2026-06-14', plannedDeliveryDate: null, trackingCode: null, carrier: null, canReturnUntil: '2026-07-01' },
 
   // Order 3 (cust-2) — onderweg + een geleverde regel met retouraanvraag
-  { id: 'ol-6', orderId: 'ord-3', productNumber: 'KOP-7712', description: 'Koppelingsset', quantity: 1, unitPrice: 110.75, status: 'onderweg_naar_partsprofi', expectedArrivalAtPartsProfi: '2026-06-20', plannedDeliveryDate: null, trackingCode: null, carrier: null, canReturnUntil: '2026-07-03' },
-  { id: 'ol-7', orderId: 'ord-3', productNumber: 'LMP-0456', description: 'LED koplampset', quantity: 1, unitPrice: 46.0, status: 'retour_aangevraagd', expectedArrivalAtPartsProfi: '2026-06-08', plannedDeliveryDate: '2026-06-11', trackingCode: '3SDHL00099887', carrier: 'DHL', canReturnUntil: '2026-07-03' },
+  { id: 'ol-6', orderId: 'ord-3', productNumber: 'KOP-7712', description: 'Koppelingsset', quantity: 1, unitPrice: 110.75, status: 'onderweg_naar_partsprofi', leadTimeCategory: 'oranje', expectedArrivalAtPartsProfi: '2026-06-20', plannedDeliveryDate: null, trackingCode: null, carrier: null, canReturnUntil: '2026-07-03' },
+  { id: 'ol-7', orderId: 'ord-3', productNumber: 'LMP-0456', description: 'LED koplampset', quantity: 1, unitPrice: 46.0, status: 'retour_aangevraagd', leadTimeCategory: 'groen', expectedArrivalAtPartsProfi: '2026-06-08', plannedDeliveryDate: '2026-06-11', trackingCode: '3SDHL00099887', carrier: 'DHL', canReturnUntil: '2026-07-03' },
 ];
 
 export const deliveryMoments = [

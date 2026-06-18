@@ -1,12 +1,20 @@
 export const PLANNING_HORIZON_DAYS = 14
 export const AGENDA_PAGE_SIZE = 10
 
+// Levertijd per categorie: aantal werkdagen na de besteldatum dat een product
+// vroegst bij de klant kan zijn.
+const LEAD_TIME_WORKDAYS = { groen: 2, oranje: 3 }
+
 // PartsProfi levert alleen op werkdagen.
 const WEEKDAY_LABELS = ['zo', 'ma', 'di', 'wo', 'do', 'vr', 'za']
 
 function isWeekday(date) {
   const day = date.getDay()
   return day !== 0 && day !== 6
+}
+
+function toIsoDate(date) {
+  return date.toISOString().slice(0, 10)
 }
 
 // isoDate is altijd via toISOString() gegenereerd (UTC); met de UTC-getters
@@ -18,23 +26,18 @@ export function formatDayLabel(isoDate) {
   return `${WEEKDAY_LABELS[date.getUTCDay()]} ${day}-${month}`
 }
 
-// Levert per werkdag in de planningshorizon de regels op die dan al bij
-// PartsProfi binnen zouden zijn, zodat we per dag kunnen tonen wat er
-// geleverd kan worden.
-export function getAvailableDeliveryDays(lines, daysAhead = PLANNING_HORIZON_DAYS) {
-  const days = []
-  const cursor = new Date()
-  let collected = 0
-  while (collected < daysAhead) {
-    if (isWeekday(cursor)) {
-      const iso = cursor.toISOString().slice(0, 10)
-      const availableLines = lines.filter((line) => line.expectedArrivalAtPartsProfi && line.expectedArrivalAtPartsProfi <= iso)
-      days.push({ date: iso, availableLines })
-      collected++
-    }
+// Vroegst-mogelijke leverdatum: telt de werkdagen van de levertijdcategorie op
+// bij de besteldatum van de order. Dit is de enige bron voor wat selecteerbaar
+// is — vervangt expectedArrivalAtPartsProfi (dat blijft alleen informatief).
+export function getEarliestDeliveryDate(orderDate, leadTimeCategory) {
+  const workdaysToAdd = LEAD_TIME_WORKDAYS[leadTimeCategory] ?? LEAD_TIME_WORKDAYS.oranje
+  const cursor = new Date(orderDate)
+  let added = 0
+  while (added < workdaysToAdd) {
     cursor.setDate(cursor.getDate() + 1)
+    if (isWeekday(cursor)) added++
   }
-  return days
+  return toIsoDate(cursor)
 }
 
 // Eén pagina werkdagen voor de leveragenda (standaard 10), met paginering
@@ -48,13 +51,22 @@ export function getAgendaWeekdayPage(pageIndex, pageSize = AGENDA_PAGE_SIZE) {
   while (days.length < pageSize) {
     if (isWeekday(cursor)) {
       if (weekdayCount >= targetStart) {
-        days.push(cursor.toISOString().slice(0, 10))
+        days.push(toIsoDate(cursor))
       }
       weekdayCount++
     }
     cursor.setDate(cursor.getDate() + 1)
   }
   return days
+}
+
+// Vandaag en morgen staan al te dichtbij om nog te wijzigen: die levering is
+// al in voorbereiding. Geldt voor alle regels op die datum, los van status.
+export function isDateLocked(isoDate) {
+  const today = new Date()
+  const tomorrow = new Date()
+  tomorrow.setDate(tomorrow.getDate() + 1)
+  return isoDate === toIsoDate(today) || isoDate === toIsoDate(tomorrow)
 }
 
 // Voor de leveragenda: gegeven een set werkdagen, welke regels staan er per dag gepland.
@@ -65,16 +77,17 @@ export function buildAgendaDays(lines, isoDates) {
   }))
 }
 
-// Werkdagen waarop een specifieke regel geleverd kan worden: nooit vóór de
-// verwachte aankomst bij PartsProfi.
-export function getSelectableDaysForLine(line, daysAhead = PLANNING_HORIZON_DAYS) {
+// Werkdagen waarop een specifieke regel geleverd kan worden: nooit vóór haar
+// eigen vroegst-mogelijke datum.
+export function getSelectableDaysForLine(line, order, daysAhead = PLANNING_HORIZON_DAYS) {
+  const earliest = getEarliestDeliveryDate(order.orderDate, line.leadTimeCategory)
   const days = []
   const cursor = new Date()
   let collected = 0
   while (collected < daysAhead) {
     if (isWeekday(cursor)) {
-      const iso = cursor.toISOString().slice(0, 10)
-      if (line.expectedArrivalAtPartsProfi && line.expectedArrivalAtPartsProfi <= iso) days.push(iso)
+      const iso = toIsoDate(cursor)
+      if (iso >= earliest) days.push(iso)
       collected++
     }
     cursor.setDate(cursor.getDate() + 1)

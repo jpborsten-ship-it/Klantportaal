@@ -9,8 +9,9 @@ import { buildAgendaDays, getAgendaWeekdayPage } from '../utils/deliveryCost'
 import { CURRENT_CUSTOMER_ID } from '../utils/currentCustomer'
 
 export default function Leveragenda() {
-  const { lines, updateLineDeliveryDate, deliveryPreference, setDeliveryPreference } = useDeliveryPlanning()
+  const { lines, updateLineDeliveryDate, updateLinesDeliveryDate, deliveryPreference, setDeliveryPreference } = useDeliveryPlanning()
   const [pageIndex, setPageIndex] = useState(0)
+  const [draggingEarliestDate, setDraggingEarliestDate] = useState(null)
 
   const klantLines = linesForCustomer(lines, orders, CURRENT_CUSTOMER_ID)
   const weekdayPage = getAgendaWeekdayPage(pageIndex)
@@ -42,7 +43,15 @@ export default function Leveragenda() {
       <Card title="Leveragenda" action={<span className="agenda-page-hint">we leveren op werkdagen</span>}>
         <div className="agenda-days">
           {days.map((day) => (
-            <AgendaDay key={day.date} day={day} orders={orders} onMove={updateLineDeliveryDate} />
+            <AgendaDay
+              key={day.date}
+              day={day}
+              orders={orders}
+              onMoveLine={updateLineDeliveryDate}
+              onMoveBlock={updateLinesDeliveryDate}
+              onDragStateChange={setDraggingEarliestDate}
+              draggingEarliestDate={draggingEarliestDate}
+            />
           ))}
         </div>
         <div className="agenda-pagination">

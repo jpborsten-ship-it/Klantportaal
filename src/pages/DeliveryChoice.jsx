@@ -29,7 +29,7 @@ export default function DeliveryChoice() {
       key: 'plannedDeliveryDate',
       header: 'Leverdag',
       render: (row) => (
-        <DeliveryDayPicker line={row} orderLines={orderLinesForOrder} onSelect={updateLineDeliveryDate} />
+        <DeliveryDayPicker line={row} order={order} onSelect={updateLineDeliveryDate} />
       ),
     },
     { key: 'status', header: 'Status', render: (row) => <StatusBadge status={row.status} /> },
