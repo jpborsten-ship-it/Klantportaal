@@ -60,6 +60,24 @@ export function getAgendaWeekdayPage(pageIndex, pageSize = AGENDA_PAGE_SIZE) {
   return days
 }
 
+// Werkdagen (ma t/m vr) van de huidige kalenderweek — voor "omzet deze week"
+// op het dashboard, los van hoeveel dagen er in de leveragenda zichtbaar zijn.
+export function getCurrentWeekWeekdays() {
+  const today = new Date()
+  const dayOfWeek = today.getDay()
+  const diffToMonday = dayOfWeek === 0 ? -6 : 1 - dayOfWeek
+  const monday = new Date(today)
+  monday.setDate(today.getDate() + diffToMonday)
+
+  const days = []
+  for (let i = 0; i < 5; i++) {
+    const d = new Date(monday)
+    d.setDate(monday.getDate() + i)
+    days.push(toIsoDate(d))
+  }
+  return days
+}
+
 // Vandaag en morgen staan al te dichtbij om nog te wijzigen: die levering is
 // al in voorbereiding. Geldt voor alle regels op die datum, los van status.
 export function isDateLocked(isoDate) {

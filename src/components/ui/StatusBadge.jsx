@@ -23,6 +23,10 @@ const STATUS_CONFIG = {
   afgewezen: { label: 'Afgewezen', tone: 'danger' },
   ontvangen: { label: 'Ontvangen', tone: 'info' },
   verwerkt: { label: 'Verwerkt', tone: 'success' },
+  // Urgentie (dashboard: acties nodig)
+  hoog: { label: 'Hoog', tone: 'danger' },
+  middel: { label: 'Middel', tone: 'warning' },
+  laag: { label: 'Laag', tone: 'info' },
 }
 
 export default function StatusBadge({ status }) {
